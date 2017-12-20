@@ -1,0 +1,31 @@
+package {{packageName}};
+
+import javax.annotation.Generated;
+
+/**
+ * Json writer for {@link {{sourceClassName}}}.
+ */
+@Generated(
+    value = "{{sourceClassNameWithPackage}}",
+    date = "{{date}}",
+    comments = "{{comment}}"
+)
+public final class {{targetClassName}} {
+
+  private {{targetClassName}}() {
+  }
+
+  /**
+   * Creates an json object to the given {@link {{sourceClassName}}}.
+   *
+   * return json representation
+   */
+  public static String toJson({{sourceClassName}} object) {
+    StringBuilder builder = new StringBuilder("{");
+    {{#fields}}
+    builder.append("\"{{value.name}}\": \"").append(object.{{value.getter}}()).append("\"{{^last}},{{/last}}");
+    {{/fields}}
+    return builder.append("}").toString();
+  }
+
+}

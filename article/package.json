@@ -1,0 +1,15 @@
+{
+  "name": "annotation-processors",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "pdf": "gulp pdf",
+    "clean": "gulp clean"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-markdown-pdf": "^5.0.0"
+  }
+}
