@@ -8,9 +8,9 @@ Annotation Prozessoren werden während des Builds vom Compiler (javac) aufgerufe
 
 ## OpenSource Beispiele
 
-Ein prominentes Beispiel für einen Annotation Prozessor ist der `„META-INF/services generator“` von Kohsuke Kawaguchi der aus einer `MetaInfServices` Annotation die Konfiguration für den `Java 6 ServiceLoader` erzeugen kann.
+Ein prominentes Beispiel für einen Annotation Prozessor ist der `"META-INF/services generator"` von Kohsuke Kawaguchi der aus einer `MetaInfServices` Annotation die Konfiguration für den `Java 6 ServiceLoader` erzeugen kann.
 
-Ein weiteres Beispiel ist das `„Project Lombok“`. Es verspricht, mit einer Reihe von Annotationen, den Boilerplate Code von Java Klassen automatisch zu generieren, z.B.: Getter, Setter, HashCode oder Equals Methoden.
+Ein weiteres Beispiel ist das `"Project Lombok"`. Es verspricht, mit einer Reihe von Annotationen, den Boilerplate Code von Java Klassen automatisch zu generieren, z.B.: Getter, Setter, HashCode oder Equals Methoden.
 
 ## Ein einfacher Annotation Prozessor
 
