@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 TRIOLOGY GmbH
+ * Copyright (c) 2017 Cloudogu GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,15 @@
  */
 
 
-package de.triology.blog.annotationprocessor.log;
+package com.cloudogu.blog.annotationprocessor.sample;
 
-import java.lang.annotation.*;
+import com.cloudogu.blog.annotationprocessor.log.Log;
 
-@Target({ElementType.TYPE})
-public @interface Log {}
+@Log
+public class Hello {
+
+    public static void main(String[] args) {
+        System.out.println("Hello");
+    }
+
+}

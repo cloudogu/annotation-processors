@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  *
- * Copyright (c) 2017 TRIOLOGY GmbH
+ * Copyright (c) 2017 Cloudogu GmbH
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,9 @@
  */
 
 
-package de.triology.blog.annotationprocessor.log;
+package com.cloudogu.blog.annotationprocessor.log;
 
-import java.util.Set;
-import javax.annotation.processing.*;
-import javax.lang.model.element.*;
-import javax.lang.model.SourceVersion;
-import javax.tools.Diagnostic;
+import java.lang.annotation.*;
 
-@SupportedAnnotationTypes("de.triology.blog.annotationprocessor.log.Log")
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
-public class LogProcessor extends AbstractProcessor {
-
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (TypeElement annotation : annotations) {
-            for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
-                processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, "found @Log at " + element);
-            }
-        }
-      	return true;
-    }
-
-}
+@Target({ElementType.TYPE})
+public @interface Log {}
