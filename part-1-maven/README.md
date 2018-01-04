@@ -11,5 +11,5 @@ mvn clean install
 Durring the compilation, you should see an output from the Annptation Prozessor like the following:
 
 ```
-[INFO] found @Log at de.triology.blog.annotationprocessor.sample.Hello
+[INFO] found @Log at com.cloudogu.blog.annotationprocessor.sample.Hello
 ```
