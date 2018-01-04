@@ -2,7 +2,7 @@
 
 Java Annotation Prozessoren sind ein sehr mächtiges Werkzeug im Werkzeugkasten eines Entwicklers. Mit ihnen lassen sich z.B. Informationen zur Buildzeit protokollieren, der Build kann mit einer Fehlermeldung abgebrochen werden, es können Konfigurationen und Dokumentationen erzeugt, Klassen verändert oder neu erstellt werden.
 
-In diesem Artikel betrachten wir die grundsätzliche Funktionsweise von Annotation Prozessoren anhand eines kleinen Beispiels. Spätere Teile werden das Erzeugen von Konfigurationen und das generieren von Code behandeln. Der in diesem Artikel verwendete Code, kann unter [https://github.com/cloudogu/annotation-processors/tree/master/part-1](https://github.com/cloudogu/annotation-processors/tree/master/part-1) eingesehen werden.
+In dem ersten Abschnitt des Artikels betrachten wir die grundsätzliche Funktionsweise von Annotation Prozessoren anhand eines kleinen Beispiels. In den beiden weiteren Abschnitten werden wir uns das Erzeugen von Konfigurationen und das generieren von Code genauer ansehen. Der in diesem Artikel verwendete Code, kann unter [https://github.com/cloudogu/annotation-processors/](https://github.com/cloudogu/annotation-processors) eingesehen werden.
 
 Annotation Prozessoren werden während des Builds vom Compiler (javac) aufgerufen, wenn eine der konfigurierten Annotationen gefunden wurde. Dabei kann ein Annotation Prozessor bestimmen, über welche Annotationen er benachrichtigt werden will. Das können eine Einzelne, mehrere oder alle sein. Wenn der Compiler eine Annotation findet, wird überprüft, ob für diese ein Prozessor registriert wurde. Ist dies der Fall, wird er ausgeführt. An diesem Punkt kann der Annotation Prozessor seine Arbeit verrichten und entscheiden, ob für die gefundene Annotation noch weitere Prozessoren aufgerufen werden dürfen.
 
@@ -15,10 +15,10 @@ Ein weiteres Beispiel ist das `„Project Lombok“`. Es verspricht, mit einer R
 ## Ein einfacher Annotation Prozessor
 
 Annotation Prozessoren müssen das Interface `javax.annotation.processing.Processor` implementieren, in den meisten Fällen empfiehlt es sich die Klasse `javax.annotation.processing.AbstractProcessor` zu erweitern, da sie nützliche Hilfsmethoden enthält. Unser Beispiel Annotation Prozessor soll eine Meldung ausgeben, wenn eine bestimmte Annotation gefunden wurde. Dafür erstellen wir zuerst unsere Annotation
-(`de/triology/blog/annotationprocessor/log/Log.java`):
+(`com/cloudogu/blog/annotationprocessor/log/Log.java`):
 
 ```java
-package de.triology.blog.annotationprocessor.log;
+package com.cloudogu.blog.annotationprocessor.log;
 import java.lang.annotation.*;
 
 @Target({ElementType.TYPE})
@@ -28,10 +28,10 @@ public @interface Log {}
 Die `Target` Annotation mit dem Parameter `ElementType.TYPE` an unserer `Log` Annotation bestimmt, dass wir `@Log` an allen Java Typen (Klassen, Interfaces oder Enums) verwenden können.
 Immer wenn Javac diese Annotation findet, wollen wir eine Meldung auf der Konsole ausgeben, die uns zeigt, welche Klasse die Annotation verwendet.
 Der Annotation Prozessor
-(`de/triology/blog/annotationprocessor/log/LogProcessor.java`) zu der `Log` Annotation:
+(`com/cloudogu/blog/annotationprocessor/log/LogProcessor.java`) zu der `Log` Annotation:
 
 ```java
-package de.triology.blog.annotationprocessor.log;
+package com.cloudogu.blog.annotationprocessor.log;
 
 import java.util.Set;
 import javax.annotation.processing.*;
@@ -39,7 +39,7 @@ import javax.lang.model.element.*;
 import javax.lang.model.SourceVersion;
 import javax.tools.Diagnostic;
 
-@SupportedAnnotationTypes("de.triology.blog.annotationprocessor.log.Log") 
+@SupportedAnnotationTypes("com.cloudogu.blog.annotationprocessor.log.Log") 
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class LogProcessor extends AbstractProcessor {
 
@@ -88,17 +88,17 @@ Für unser Beispiel:
 ### Registration
 
 Damit der Compiler den Annotation Prozessor finden kann, muss dieser registriert werden. Dies erfolgt über den mit Java 6 eingeführten `ServiceLoader`. Dafür müssen wir eine Datei unter `META-INF/services/javax.annotation.processing.Processor` anlegen, die den vollständigen Namen unseres Annotation Prozessors enthält. In unserem Beispiel wäre das:
-`de.triology.blog.annotationprocessor.log.LogProcessor`
+`com.cloudogu.blog.annotationprocessor.log.LogProcessor`
 
 ### Verwendung
 
 Um den Prozessor verwenden zu können, brauchen wir eine Klasse, die mit `@Log` annotiert ist, zum Beispiel
-(`de/triology/blog/annotationprocessor/sample/Hello.java`):
+(`com/cloudogu/blog/annotationprocessor/sample/Hello.java`):
 
 ```java
-package de.triology.blog.annotationprocessor.sample;
+package com.cloudogu.blog.annotationprocessor.sample;
 
-import de.triology.blog.annotationprocessor.log.Log;
+import com.cloudogu.blog.annotationprocessor.log.Log;
 
 @Log
 public class Hello {
@@ -113,24 +113,24 @@ public class Hello {
 Nach dem Anlegen der Beispiel-Klasse können wir kompilieren und unseren Annotation Prozessor testen. Zuerst kompilieren wir die Annotation und den Prozessor:
 
 ```bash
-javac –cp . -proc:none de/triology/blog/annotationprocessor/log/*.java
+javac –cp . -proc:none com/cloudogu/blog/annotationprocessor/log/*.java
 ```
 
 Der Parameter „-proc:none“ deaktiviert alle Annotation Prozessoren. Das ist wichtig, da der Compiler unsere Registrierung (die Datei unter META-INF/services) bereits findet, aber unser Prozessor noch nicht kompiliert ist. Das würde zu einem Fehler führen.
 Jetzt können wir unsere Test-Klasse kompilieren und damit unseren Annotation Prozessor testen:
 
 ```bash
-javac –cp . de/triology/blog/annotationprocessor/sample/*.java
+javac –cp . com/cloudogu/blog/annotationprocessor/sample/*.java
 ```
 
 Jetzt sollte der Compiler den Annotation Prozessor aufrufen und wir sollten folgende Zeile auf der Konsole sehen:
 
 ```text
-Note: found @Log at de.triology.blog.annotationprocessor.sample.Hello
+Note: found @Log at com.cloudogu.blog.annotationprocessor.sample.Hello
 ```
 
-Annotation Prozessoren können auch mit den gängigen Buildtools und IDEs verwendet werden. Um Annotation Prozessoren zum Beispiel mit Maven zu verwenden, muss der Build in separate Module aufgeteilt werden. Die Separierung muss erfolgen, damit Maven den Annotation Prozessor unabhängig und vor Verwendung kompilieren kann. Unser Beispiel mit Maven kann man unter der URL [https://github.com/triologygmbh/annotation-processors/tree/part-1-maven](https://github.com/triologygmbh/annotation-processors/tree/part-1-maven) einsehen. Hierbei ist zu beachten, dass das `maven-compiler-plugin` im Modul `sample` so konfiguriert ist, dass Compiler-Warnings ausgegeben werden (`true`). Führt man nun `mvn clean install` im `parent`-Modul aus, erscheint die erwartete Meldung im Output:
+Annotation Prozessoren können auch mit den gängigen Buildtools und IDEs verwendet werden. Um Annotation Prozessoren zum Beispiel mit Maven zu verwenden, muss der Build in separate Module aufgeteilt werden. Die Separierung muss erfolgen, damit Maven den Annotation Prozessor unabhängig und vor Verwendung kompilieren kann. Unser Beispiel mit Maven kann man unter der URL [https://github.com/cloudogu/annotation-processors/tree/master/part-1-maven](https://github.com/cloudogu/annotation-processors/tree/master/part-1-maven) einsehen. Hierbei ist zu beachten, dass das `maven-compiler-plugin` im Modul `sample` so konfiguriert ist, dass Compiler-Warnings ausgegeben werden (`true`). Führt man nun `mvn clean install` im `parent`-Modul aus, erscheint die erwartete Meldung im Output:
 
 ```text
-[INFO] found @Log at de.triology.blog.annotationprocessor.sample.Hello
+[INFO] found @Log at com.cloudogu.blog.annotationprocessor.sample.Hello
 ```
