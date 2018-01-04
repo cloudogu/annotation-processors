@@ -1,6 +1,6 @@
 ## Source Code generieren
 
-Im dritten und letzten Abschnitt des Artikels wird demonstriert wie man SourceCode mit Hilfe eines `AnnotationProzessors` generieren kann. In unserem Beispiel wollen wir eine Klasse generieren die es ermöglicht aus einer annotierten Klasse Json zu erzeugen. In unserem Beispiel wollen wir folgendes erreichen. Wir wollen für Klassen die mit der Annotation `@JsonObject` versehen wurden, `JsonWriter` Klassen erzeugen. Als Beispiel verwenden dir Klasse `Person`:
+Im dritten und letzten Abschnitt des Artikels wird demonstriert wie man SourceCode mit Hilfe eines `AnnotationProzessors` generieren kann. In unserem Beispiel wollen wir eine `JsonWriter` Klasse, für jede mit einer `@JsonObject` Annotation versehenen Klasse generieren. Die generierten `JsonWriter` Klassen, sollen Json für alle `Getter` Methoden der Annotierten Klasse erzeugen. Konkret soll zu der Klasse `Person`:
 
 ```java
 @JsonObject
@@ -18,7 +18,7 @@ public class Person {
 }
 ```
 
-Zu dieser Klasse soll automatisch ein `PersonJsonWriter` erzeugt werden, der folgendermaßen aussieht:
+automatisch ein `PersonJsonWriter` erzeugt werden, der folgendermaßen aussieht:
 
 ```java
 public final class PersonJsonWriter {
@@ -44,11 +44,11 @@ public final class PersonJsonWriter {
 }
 ```
 
-Es wäre auch möglich an die `Person` Klasse eine `toJson` Methode anzufügen, aber das würde die länge des Artikels sprengen, da wir hierfür die Klasse parsen müssten.
+Es wäre auch möglich an die `Person` Klasse eine `toJson` Methode anzufügen, aber das würde die länge des Artikels sprengen, da wir hierfür die ursprüngliche Klasse parsen müssten.
 
 ### Annotierte Klassen finden
 
-Als erstes müssen wir alle Klassen finden die mit der `JsonObject` Annotation versehen wurden. Das unterscheidet sich auch in diesem Fall nicht von den beiden anderen Beispielen, darum sparen wir uns diesmal das Code-Listing. Anschließend müssen wir für jede gefundene Klasse ein Scope-Objekt erzeugen, mit dem wir später eine Template-Engine füttern werden. 
+Als erstes müssen wir alle Klassen finden die mit der `JsonObject` Annotation versehen wurden. Das unterscheidet sich in diesem Fall nicht von den beiden ersten Abschnitten, darum sparen wir uns diesmal das Code-Listing. Anschließend müssen wir für jede gefundene Klasse ein Scope-Objekt erzeugen, mit dem wir später eine Template-Engine füttern werden. 
 
 ```java
 public final class Scope {
@@ -102,13 +102,13 @@ private String getPackageName(TypeElement classElement) {
 }
 ```
 
-Jetzt brauchen wir nur noch die Namen aller Getter-Methoden für unser Scope-Objekt. Dafür können wir das `Elements` Util des `ProcessingEnvironments` verwenden:
+Jetzt brauchen wir nur noch die Namen aller Getter-Methoden für unser Scope-Objekt. Dafür können wir ElementsUtil des `ProcessingEnvironments` verwenden:
 
 ```java
 processingEnv.getElementUtils().getAllMembers(typeElement)
 ```
 
-Die `getAllMembers` Methode gibt uns eine Liste aller Member Elemente unserer Klasse zurück, aus dieser Liste müssen wir nur noch alle Elemente vom Typ Method, deren Name mit einem “get” anfängt herausfiltern. Dafür lässt sich sehr gut die Stream API der Java Collections verwenden die mit Java 8 eingeführt wurden:
+Die `getAllMembers` Methode gibt uns eine Liste aller Member Elemente unserer Klasse zurück, aus dieser Liste müssen wir nur noch alle Elemente vom Typ Method, deren Name mit einem “get” anfängt herausfiltern. Dafür lässt sich sehr gut die Stream API der Java Collections verwenden, die mit Java 8 eingeführt wurden:
 
 ```java
 processingEnv.getElementUtils().getAllMembers(typeElement)
@@ -132,7 +132,7 @@ Jetzt haben wir alle Informationen zusammen die wir brauchen um den `JsonWriter`
 
 ### JsonWriter schreiben
 
-Um den JsonWriter zuschreiben kann abermals der `Filer` aus dem `ProcessingEnvironment` verwendet werden:
+Um den JsonWriter zuschreiben, kann abermals der `Filer` aus dem `ProcessingEnvironment` verwendet werden:
 
 ```java
 Filer filer = processingEnv.getFiler();
@@ -145,9 +145,9 @@ Der `createSourceFile` Methode muss man den gewünschten Klassennamen und das an
 Writer writer = fileObject.openWriter();
 ```
 
-Dieser Writer schreibt dann eine Java-Datei in den Ordner des Packages in den Klassenpfad (mit [Maven](https://maven.apache.org) werden von `AnnotationProzessoren` erstellte Klassen unter `target/generated-sources/annotations` abgelegt).
+Dieser Writer schreibt dann eine Java-Datei in den Ordner des Packages in den Klassenpfad (mit [Maven](https://maven.apache.org), werden von `AnnotationProzessoren` erstellte Klassen unter `target/generated-sources/annotations` abgelegt).
 
-Wir könnten nun den SourceCode direkt mit dem Writer schreiben, aber man verliert schnell den überblick durch das escaping der Hochkommas. Eine andere Möglichkeit den Quellcode aus dem Scope-Objekt zu erzeugen ist [JavaPoet](https://github.com/square/javapoet). In unserem Beispiel werden wir die [Java Implementation](https://github.com/spullara/mustache.java) der Template-Engine [Mustache](https://mustache.github.io/) verwenden. [Mustache](https://mustache.github.io/) Template sind sehr einfach aufgebaut und die Syntax ist schnell erlernt. 
+Wir könnten nun den SourceCode direkt mit dem Writer schreiben, aber man verliert schnell den überblick durch das Escaping der Hochkommas. Eine andere Möglichkeit den Quellcode aus dem Scope-Objekt zu erzeugen ist [JavaPoet](https://github.com/square/javapoet). In unserem Beispiel werden wir die [Java Implementation](https://github.com/spullara/mustache.java) der Template-Engine [Mustache](https://mustache.github.io/) verwenden. [Mustache](https://mustache.github.io/) Templates sind sehr einfach aufgebaut und die Syntax ist schnell erlernt. 
 
 Um unser Beispiel zu verstehen reicht es zu wissen, das mit dem Ausdruck `{{sourceClassName}}` auf die Getter-Methode `“getSourceClassName”` des Scope-Objektes zugegriffen wird, das mittels `{{#fields}}...{{/fields}}` über die Collection der Fields Variable des Scope-Objektes iteriert wird und das `{{^last}}...{{/last}}` prüft dass das Feld nicht das letzte Element in der Collection ist.
 
