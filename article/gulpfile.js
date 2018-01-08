@@ -40,7 +40,7 @@ gulp.task('odt', function() {
 
 gulp.task('cloudogu-pdf', function() {
     const src = path.resolve(__dirname, 'src');
-    let cmd = 'docker run -u $(id -u) --rm  -v ' + src + ':/data cloudogu/doc_template:0.14.0'
+    let cmd = 'docker run -u $(id -u) --rm  -v ' + src + ':/data cloudogu/doc_template:0.15.0'
     for (let file of files) {
         cmd += ' ' + file;
     }
