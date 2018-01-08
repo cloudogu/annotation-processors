@@ -19,7 +19,26 @@ gulp.task('pdf', function() {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('pandoc', function() {
+gulp.task('odt', function() {
+    const src = path.resolve(__dirname, 'src');
+    let cmd = 'docker run -u $(id -u) --rm  -v ' + src + ':/data -w /data cloudogu/pandoc:0.7.0 '
+    for (let file of files) {
+        cmd += ' ' + file
+    }
+    cmd += ' -o /data/document.odt'
+    execSync(cmd)
+
+    const srcDoc = path.resolve(src, 'document.odt');
+
+    const dist = path.resolve(__dirname, 'dist');
+    if (!fs.existsSync(dist)) {
+        fs.mkdirSync(dist);
+    }
+    const distDoc = path.resolve(dist, info.name + '.odt');
+    fs.renameSync(srcDoc, distDoc);
+});
+
+gulp.task('cloudogu-pdf', function() {
     const src = path.resolve(__dirname, 'src');
     let cmd = 'docker run -u $(id -u) --rm  -v ' + src + ':/data cloudogu/doc_template:0.14.0'
     for (let file of files) {

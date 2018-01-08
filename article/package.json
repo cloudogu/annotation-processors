@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "scripts": {
     "pdf": "gulp pdf",
+    "odt": "gulp odt",
+    "cloudogu-pdf": "gulp cloudogu-pdf",
     "clean": "gulp clean"
   },
   "devDependencies": {
