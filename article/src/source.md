@@ -1,6 +1,6 @@
 ## Source Code generieren
 
-Im dritten und letzten Abschnitt des Artikels wird demonstriert wie man SourceCode mit Hilfe eines `AnnotationProzessors` generieren kann. In unserem Beispiel wollen wir eine `JsonWriter` Klasse, für jede mit einer `@JsonObject` Annotation versehenen Klasse generieren. Die generierten `JsonWriter` Klassen, sollen Json für alle `Getter` Methoden der Annotierten Klasse erzeugen. Konkret soll zu der Klasse `Person`:
+Im dritten und letzten Abschnitt des Artikels wird demonstriert wie man Source Code mit Hilfe eines Annotation Prozessors generieren kann. In unserem Beispiel wollen für jede mit einer `@JsonObject` Annotation versehenen Klasse eine zusätzliche `JsonWriter` Klasse generieren. Die generierten `JsonWriter` Klassen, sollen Json für alle `Getter`-Methoden der Annotierten Klasse erzeugen. Konkret soll zu der Klasse `Person`:
 
 ```java
 @JsonObject
@@ -44,11 +44,11 @@ public final class PersonJsonWriter {
 }
 ```
 
-Es wäre auch möglich an die `Person` Klasse eine `toJson` Methode anzufügen, aber das würde die länge des Artikels sprengen, da wir hierfür die ursprüngliche Klasse parsen müssten.
+Es wäre auch möglich an die `Person` Klasse eine `toJson` Methode anzufügen, aber das würde die Länge des Artikels sprengen, da wir hierfür die ursprüngliche Klasse parsen müssten.
 
 ### Annotierte Klassen finden
 
-Als erstes müssen wir alle Klassen finden die mit der `JsonObject` Annotation versehen wurden. Das unterscheidet sich in diesem Fall nicht von den beiden ersten Abschnitten, darum sparen wir uns diesmal das Code-Listing. Anschließend müssen wir für jede gefundene Klasse ein Scope-Objekt erzeugen, mit dem wir später eine Template-Engine füttern werden. 
+Als erstes müssen wir alle Klassen finden, die mit der `JsonObject` Annotation versehen wurden. Das unterscheidet sich in diesem Fall nicht von den beiden ersten Abschnitten, darum sparen wir uns diesmal das Code-Listing. Anschließend müssen wir für jede gefundene Klasse ein `Scope`-Objekt erzeugen, mit dem wir später eine Template-Engine füttern werden. 
 
 ```java
 public final class Scope {
@@ -87,14 +87,14 @@ public final class Scope {
 }
 ```
 
-Für das Scope-Objekt brauchen wir den Namen der Annotierten Klasse und dessen Package. Um an den Namen des Packages zu kommen, müssen wir zunächst sicherstellen das es sich bei unserem annotierten Element um ein `TypeElement` handelt:
+Für das `Scope`-Objekt brauchen wir den Namen der annotierten Klasse und dessen Package. Um an den Namen des Packages zu kommen, müssen wir zunächst sicherstellen, dass es sich bei unserem annotierten Element um ein `TypeElement` handelt:
 
 ```java
 if (element instanceof TypeElement) {
 }
 ```
 
-Wenn das der Fall ist können wir das `TypeElement` nach dessen übergeordneten Element fragen und das können wir wiederum nach seinem Namen fragen:
+Wenn das der Fall ist, können wir das `TypeElement` nach dessen übergeordneten Element fragen und dieses wiederum nach seinem Namen fragen:
 
 ```java
 private String getPackageName(TypeElement classElement) {
@@ -102,13 +102,13 @@ private String getPackageName(TypeElement classElement) {
 }
 ```
 
-Jetzt brauchen wir nur noch die Namen aller Getter-Methoden für unser Scope-Objekt. Dafür können wir ElementsUtil des `ProcessingEnvironments` verwenden:
+Jetzt brauchen wir nur noch die Namen aller Getter-Methoden für unser `Scope`-Objekt. Dafür können wir `ElementsUtil`s des `ProcessingEnvironments` verwenden:
 
 ```java
 processingEnv.getElementUtils().getAllMembers(typeElement)
 ```
 
-Die `getAllMembers` Methode gibt uns eine Liste aller Member Elemente unserer Klasse zurück, aus dieser Liste müssen wir nur noch alle Elemente vom Typ Method, deren Name mit einem “get” anfängt herausfiltern. Dafür lässt sich sehr gut die Stream API der Java Collections verwenden, die mit Java 8 eingeführt wurden:
+Die `getAllMembers`-Methode gibt uns eine Liste aller Member Elemente unserer Klasse zurück. Aus dieser Liste müssen wir nur noch alle Elemente vom Typ `METHOD`, deren Name mit einem “get” anfängt, herausfiltern. Dafür lässt sich sehr gut die Stream API der Java Collections verwenden, die mit Java 8 eingeführt wurden:
 
 ```java
 processingEnv.getElementUtils().getAllMembers(typeElement)
@@ -132,7 +132,7 @@ Jetzt haben wir alle Informationen zusammen die wir brauchen um den `JsonWriter`
 
 ### JsonWriter schreiben
 
-Um den JsonWriter zuschreiben, kann abermals der `Filer` aus dem `ProcessingEnvironment` verwendet werden:
+Um den `JsonWriter` zuschreiben, kann abermals der `Filer` aus dem `ProcessingEnvironment` verwendet werden:
 
 ```java
 Filer filer = processingEnv.getFiler();
@@ -145,11 +145,14 @@ Der `createSourceFile` Methode muss man den gewünschten Klassennamen und das an
 Writer writer = fileObject.openWriter();
 ```
 
-Dieser Writer schreibt dann eine Java-Datei in den Ordner des Packages in den Klassenpfad (mit [Maven](https://maven.apache.org), werden von `AnnotationProzessoren` erstellte Klassen unter `target/generated-sources/annotations` abgelegt).
+Dieser `Writer` schreibt dann eine Java-Datei in den Ordner des Packages in den Klassenpfad (mit [Maven](https://maven.apache.org) werden von Annotation Prozessoren erstellte Klassen unter `target/generated-sources/annotations` abgelegt).
 
-Wir könnten nun den SourceCode direkt mit dem Writer schreiben, aber man verliert schnell den überblick durch das Escaping der Hochkommas. Eine andere Möglichkeit den Quellcode aus dem Scope-Objekt zu erzeugen ist [JavaPoet](https://github.com/square/javapoet). In unserem Beispiel werden wir die [Java Implementation](https://github.com/spullara/mustache.java) der Template-Engine [Mustache](https://mustache.github.io/) verwenden. [Mustache](https://mustache.github.io/) Templates sind sehr einfach aufgebaut und die Syntax ist schnell erlernt. 
+Wir könnten nun den Source Code direkt mit dem `Writer` schreiben, aber man verliert schnell den Überblick durch das Escaping der Hochkommas. Eine andere Möglichkeit den Quellcode aus dem `Scope`-Objekt zu erzeugen, ist [JavaPoet](https://github.com/square/javapoet). In unserem Beispiel werden wir die [Java Implementation](https://github.com/spullara/mustache.java) der Template-Engine [Mustache](https://mustache.github.io/) verwenden. [Mustache](https://mustache.github.io/) Templates sind sehr einfach aufgebaut und die Syntax ist schnell erlernt. 
 
-Um unser Beispiel zu verstehen reicht es zu wissen, das mit dem Ausdruck `{{sourceClassName}}` auf die Getter-Methode `getSourceClassName` des Scope-Objektes zugegriffen wird, das mittels `{{#fields}}...{{/fields}}` über die Collection der Fields Variable des Scope-Objektes iteriert wird und das `{{^last}}...{{/last}}` prüft dass das Feld nicht das letzte Element in der Collection ist.
+Um unser Beispiel zu verstehen, reicht es zu wissen, dass
+* mit dem Ausdruck `{{sourceClassName}}` auf die Getter-Methode `getSourceClassName` des `Scope`-Objektes zugegriffen wird
+* mittels `{{#fields}}...{{/fields}}` über die Collection der Fields Variable des `Scope`-Objektes iteriert wird und
+* `{{^last}}...{{/last}}` prüft, dass das Feld nicht das letzte Element in der Collection ist.
 
 ```java
 package {{packageName}};
@@ -179,6 +182,6 @@ Template template = factory.compile("com/cloudogu/blog/jsonwriter.mustache");
 template.execute(writer, scope);
 ```
 
-### OpenSource Beispiele
+### Open Source Beispiele
 
 Prominente Beispiele für Code-Generatoren die AnnotationProzessoren verwenden, sind [QueryDSL](http://www.querydsl.com/), [Hibernate Metamodel Generator](http://hibernate.org/orm/tooling/) und [Project Lombok](https://projectlombok.org/).

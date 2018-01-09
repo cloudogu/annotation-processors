@@ -1,4 +1,4 @@
-## Konfigurationsdateien generien
+## Konfigurationsdateien generieren
 
 Im zweiten Abschnitt wollen wir uns dem Erzeugen von Konfigurationsdateien für eine einfache Plugin Bibliothek widmen. Dafür werden wir einen `AnnotationProcessor` schreiben, der alle Klassen, die mit einer `@Extension` Annotation versehen wurden, mitsamt ihres Javadoc, in eine XML-Datei schreibt. Zusätzlich werden wir eine Klasse schreiben die es uns erlaubt diese Dateien aus dem Classpath auszulesen.
 
@@ -13,7 +13,7 @@ public @interface Extension {
 
 Die Extension Annotation ähnelt sehr der Log-Annotation aus dem ersten Abschnitt, mit Ausnahme der Documented Annotation. `@Documented` sorgt dafür das unsere Annotation im Javadoc der annotierten Klasse auftaucht.
 
-### Der Extension AnnotationProzessor
+### Der Extension Annotation Prozessor
 
 Der `ExtensionProcessor` sammelt zuerst alle Klassen die mit unserer Extension Annotation versehen wurden in einem Set:
 
@@ -27,13 +27,13 @@ for ( TypeElement annotation : annotations ) {
 }
 ```
 
-Die `createDescriptor` Methode speichert dabei den Namen und das Javadoc der anotierten Klasse in einer eigenen Klasse namens `ExtensionDescriptor`. Den Namen kann man über den Typ des Elementes erfragen:
+Die `createDescriptor` Methode speichert dabei den Namen und das Javadoc der annotierten Klasse in einer eigenen Klasse namens `ExtensionDescriptor`. Den Namen kann man über den Typ des Elementes erfragen:
 
 ```java
 extension.asType().toString()
 ```
 
-Das JavaDoc der Klasse kann man über `Elements` des `ProcessingEnvironment`’s erfragen:
+Das JavaDoc der Klasse kann man über `Elements` des `ProcessingEnvironment`s erfragen:
 
 ```java
 processingEnv.getElementUtils().getDocComment(extension).trim()
@@ -69,7 +69,7 @@ Mit dem `ExtensionProcessor` haben wir jetzt alles um während des Kompilierens 
 </spl-extensions>
 ```
 
-Und sich im selben Verzeichnis wie die kompilierten Klassen befinden (bei [Apache Maven](https://maven.apache.org/) `target/classes`).
+Diese Datei sollte sich im selben Verzeichnis wie die kompilierten Klassen befinden (bei [Maven](https://maven.apache.org/) `target/classes`).
 
 ### Extensions Util
 
@@ -88,7 +88,7 @@ public static List<ExtensionDescriptor> getExtensions() throws IOException {
 }
 ```
 
-Mit dieser Methode werden alle Extension XML-Dateien im Classpath gefunden und ein einer Liste werden alle Klassen gespeichert, die mit einer Extension Annotation annotiert wurden. Da wir den ContextClassLoader des Threads verwenden, können sich unsere extensions.xml Dateien sogar in verschiedenen JAR-Dateien befinden.
+Mit dieser Methode werden alle Extension XML-Dateien im Classpath gefunden. Außerdem werden in einer Liste alle Klassen gespeichert, die mit einer Extension Annotation annotiert wurden. Da wir den `ContextClassLoader` des Threads verwenden, können sich unsere Extensions XML-Dateien sogar in verschiedenen JAR-Dateien befinden.
 
 Wenn wir jetzt alle Extension Klassen unserer Anwendung ausgeben wollen, können wir folgenden Code verwenden:
 
