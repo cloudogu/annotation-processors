@@ -1,5 +1,9 @@
-[
-    "introduction.md",
-    "configuration.md",
-    "source.md"
-]
+{
+    "title": "Java Annotation Prozessoren",
+    "author": "Sebastian Sdorra",
+    "sources": [
+        "introduction.md",
+        "configuration.md",
+        "source.md"
+    ]
+}

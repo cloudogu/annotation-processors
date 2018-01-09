@@ -9,9 +9,11 @@
     "clean": "gulp clean"
   },
   "devDependencies": {
+    "git-rev-sync": "^1.9.1",
     "gulp": "^3.9.1",
     "gulp-clean": "^0.3.2",
     "gulp-concat": "^2.6.1",
-    "gulp-markdown-pdf": "^5.0.0"
+    "gulp-markdown-pdf": "^5.0.0",
+    "moment": "^2.20.1"
   }
 }

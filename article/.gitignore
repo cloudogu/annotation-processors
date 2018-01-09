@@ -107,3 +107,4 @@ Temporary Items
 # End of https://www.gitignore.io/api/osx,linux,node
 
 dist
+.tmp

@@ -4,10 +4,13 @@ const concat = require('gulp-concat');
 const markdownPdf = require('gulp-markdown-pdf');
 const path = require('path');
 const fs = require('fs');
+const git = require('git-rev-sync');
+const moment = require('moment');
 const { execSync } = require('child_process');
 
 const info = require('./package.json');
-const files = require('./src/index.json');
+const index = require('./src/index.json');
+const files = index.sources;
 
 gulp.task('pdf', function() {
     const sources = files.map(f => './src/' + f);
@@ -39,8 +42,22 @@ gulp.task('odt', function() {
 });
 
 gulp.task('cloudogu-pdf', function() {
+    const tmp = path.resolve(__dirname, '.tmp');
+    if (!fs.existsSync(tmp)) {
+        fs.mkdirSync(tmp);
+    }
+
+    const date = moment().format('YYYY-MM-DD hh:mm:ss');
+
+    let metaContent = '% ' + index.title + '\n';
+    metaContent += '% ' + index.author + '\n';
+    metaContent += '% Version ' + git.short() + ' vom ' + date;
+
+    const meta = path.resolve(tmp, "meta.md");
+    fs.writeFileSync(meta, metaContent);
+
     const src = path.resolve(__dirname, 'src');
-    let cmd = 'docker run -u $(id -u) --rm  -v ' + src + ':/data cloudogu/doc_template:0.15.0'
+    let cmd = 'docker run -u $(id -u) --rm -v ' + tmp + ':/meta -v ' + src + ':/data cloudogu/doc_template:0.15.0 /meta/meta.md'
     for (let file of files) {
         cmd += ' ' + file;
     }
