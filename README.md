@@ -1,5 +1,9 @@
 # annotation-processors
 
+The german source of the article can be found in the [article directory](https://github.com/cloudogu/annotation-processors/tree/master/article).
+
+## Examples
+
 Examples on how to use Java Annotation Processors. The examples are located in separate folders:
 
 * simple usage with plain **javac** ([part-1](https://github.com/cloudogu/annotation-processors/tree/master/part-1))
