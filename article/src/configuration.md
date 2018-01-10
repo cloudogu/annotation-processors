@@ -1,6 +1,8 @@
 ## Konfigurationsdateien generieren
 
-Im zweiten Abschnitt wollen wir uns dem Erzeugen von Konfigurationsdateien für eine einfache Plugin Bibliothek widmen. Dafür werden wir einen `AnnotationProcessor` schreiben, der alle Klassen, die mit einer `@Extension` Annotation versehen wurden, mitsamt ihres Javadoc, in eine XML-Datei schreibt. Zusätzlich werden wir eine Klasse schreiben die es uns erlaubt diese Dateien aus dem Classpath auszulesen.
+Im zweiten Abschnitt wollen wir uns dem Erzeugen von Konfigurationsdateien für eine einfache Plugin Bibliothek widmen. Dafür werden wir einen Annotation Prozessor schreiben, der alle Klassen, die mit einer `@Extension` Annotation versehen wurden, mitsamt ihres Javadoc, in eine XML-Datei schreibt. Zusätzlich werden wir eine Klasse schreiben die es uns erlaubt diese Dateien aus dem Classpath auszulesen. 
+
+Es ist auch möglich alle Klassen mit einer `@Extension` Annotation zu finden, ohne einen Annotation Prozessor zu verwenden. Dafür müsste man aber alle Element des Classpath (Ordner und Jar-Dateien) öffnen, jede Klasse laden und mit Reflection überprüfen, ob die Klasse die gesuchte Annotation hat. Dieses Vorgehen ist sehr viel aufwändiger, anfälliger für Fehler und deutlich langsamer.
 
 ### Die Extension Annotation
 
@@ -98,6 +100,10 @@ for (ExtensionDescriptor descriptor : Extensions.getExtensions()) {
 }
 ```
 
-### Fazit
+Das gesamte Beispiel kann unter [part-2](https://github.com/cloudogu/annotation-processors/tree/master/part-2) des GitHub Repositories gefunden werden.
 
-Mit dem in diesem Abschnitt gezeigten Verfahren, kann ein einfaches Plugin-Framework erstellen werden. Beispiele aus der OpenSource Welt die dieses Verfahren nutzen sind der [ServiceLoader von Kohsuke](http://metainf-services.kohsuke.org/) und das Plugin Framework von [SCM-Manager 2.0.0](https://www.scm-manager.org/release/scm-manager-2-milestone-1/). Das gesamte Beispiel kann unter dem Branch [part-2](https://github.com/cloudogu/annotation-processors/tree/master/part-2) des GitHub Repositories gefunden werden.
+### Beispiele aus der Open Source Welt
+
+Ein prominentes Beispiel für einen Annotation Prozessor der Konfigurationsdateien generiert, ist der `"META-INF/services generator"` von Kohsuke Kawaguchi der aus einer `MetaInfServices` Annotation die Konfiguration für den `Java 6 ServiceLoader` erzeugen kann.
+
+Ein weiteres Beispiel ist das Plugin Framework von [SCM-Manager 2.0.0](https://www.scm-manager.org/release/scm-manager-2-milestone-1/). SCM-Manager hat in Version 1 noch Classpath Scanning verwendet um die Erweiterungen zu finden, durch den Umstieg auf Annotation Prozessoren konnte die Startzeit von SCM-Manager 2 drastisch verkürzt werden.
