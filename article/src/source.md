@@ -1,6 +1,6 @@
 ## Source Code generieren
 
-Im dritten und letzten Abschnitt des Artikels wird demonstriert wie man Source Code mit Hilfe eines Annotation Prozessors generieren kann. In unserem Beispiel wollen für jede mit einer `@JsonObject` Annotation versehenen Klasse eine zusätzliche `JsonWriter` Klasse generieren. Die generierten `JsonWriter` Klassen, sollen Json für alle `Getter`-Methoden der Annotierten Klasse erzeugen. Konkret soll zu der Klasse `Person`:
+Im dritten und letzten Abschnitt des Artikels wird demonstriert wie man Source Code mit Hilfe eines Annotation Prozessors generieren kann. In unserem Beispiel wollen für jede mit einer `@JsonObject` Annotation versehenen Klasse eine zusätzliche `JsonWriter` Klasse generieren. Die generierten `JsonWriter` Klassen, sollen Json für alle `Getter`-Methoden der Annotierten Klasse erzeugen. Damit ist es möglich annotierte Klassen, in das Json Format zu serialisieren. Konkret soll zu der Klasse `Person`:
 
 ```java
 @JsonObject
@@ -147,7 +147,11 @@ Writer writer = fileObject.openWriter();
 
 Dieser `Writer` schreibt dann eine Java-Datei in den Ordner des Packages in den Klassenpfad (mit [Maven](https://maven.apache.org) werden von Annotation Prozessoren erstellte Klassen unter `target/generated-sources/annotations` abgelegt).
 
-Wir könnten nun den Source Code direkt mit dem `Writer` schreiben, aber man verliert schnell den Überblick durch das Escaping der Hochkommas. Eine andere Möglichkeit den Quellcode aus dem `Scope`-Objekt zu erzeugen, ist [JavaPoet](https://github.com/square/javapoet). In unserem Beispiel werden wir die [Java Implementation](https://github.com/spullara/mustache.java) der Template-Engine [Mustache](https://mustache.github.io/) verwenden. [Mustache](https://mustache.github.io/) Templates sind sehr einfach aufgebaut und die Syntax ist schnell erlernt. 
+Wir könnten nun den Source Code direkt mit dem `Writer` schreiben, aber man verliert schnell den Überblick durch das Escaping der Hochkommas. 
+
+Eine andere Möglichkeit den Quellcode aus dem `Scope`-Objekt zu erzeugen, ist [JavaPoet](https://github.com/square/javapoet). [JavaPoet](https://github.com/square/javapoet) bietet eine Java Builder-API um Java-Dateien zu erzeugen. Die Verwendung von [JavaPoet](https://github.com/square/javapoet), würde aber den Rahmen des Artikels sprengen, deshalb begnügen wir uns mit einer einfachen Template-Engine für unser Beispeil.
+
+Wir werden die [Java Implementation](https://github.com/spullara/mustache.java) der Template-Engine [Mustache](https://mustache.github.io/) verwenden. [Mustache](https://mustache.github.io/) Templates sind sehr einfach aufgebaut und die Syntax ist schnell erlernt. 
 
 Um unser Beispiel zu verstehen, reicht es zu wissen, dass
 * mit dem Ausdruck `{{sourceClassName}}` auf die Getter-Methode `getSourceClassName` des `Scope`-Objektes zugegriffen wird
@@ -182,6 +186,29 @@ Template template = factory.compile("com/cloudogu/blog/jsonwriter.mustache");
 template.execute(writer, scope);
 ```
 
+Jetzt haben wir alles zusammen um den `PersonJsonWriter` zu generieren. Dafür kompilieren wir die, mit der `@Json` annotierten, `Person` Klasse mit unserem Annotation Prozessor im Classpath. Anschließend sollten wir die `PersonJsonWriter` Klasse im `target/classes` Verzeichnis finden. Verwenden können wir die Klasse wie folgt:
+
+```java
+Person person = new Person("tricia", "tricia.mcmillian@hitchhicker.com");
+String json = PersonJsonWriter.toJson(person);
+System.out.println(json);
+```
+
+Das obere Listing sollte den folgenden Json-String ausgeben:
+
+```json
+{
+  "class": "class com.cloudogu.blog.Person",
+  "username": "tricia",
+  "email": "tricia.mcmillian@hitchhicker.com"
+}
+```
+
 ### Open Source Beispiele
 
-Prominente Beispiele für Code-Generatoren die AnnotationProzessoren verwenden, sind [QueryDSL](http://www.querydsl.com/), [Hibernate Metamodel Generator](http://hibernate.org/orm/tooling/) und [Project Lombok](https://projectlombok.org/).
+Prominente Beispiele für Annotation Prozessoren die Quellcode generieren:
+
+* [Hibernate Metamodel Generator](http://hibernate.org/orm/tooling/) generiert ein Metamodel aus JPA-Entities, um die JPA-Criteria-API typensicher zu verwenden.
+* [QueryDSL](http://www.querydsl.com/) bietet ein Konzept, um Abfragen für Java-Entities in SQL-nahen
+Sprachen zu formulieren. Dabei werden Annotation Prozessoren verwendet, um die API für die Abfragen aus den Entieties zu generieren.
+* [Project Lombok](https://projectlombok.org/) verspricht, mit einer Reihe von Annotationen, den Boilerplate Code von Java Klassen automatisch zu generieren, z.B. Getter, Setter, `hashCode`- oder `equals`-Methoden.
