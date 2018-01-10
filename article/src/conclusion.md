@@ -1,6 +1,6 @@
 ## Fazit
 
-An den gezeigten Beispielen lässt sich sehr gut erkennen, das Annotation Prozessoren ein sehr mächtiges Werkzeug sind. Annotation Prozessoren können, wie auf magische Weise, Quellcode und Konfigurationsdateien erzeugen. 
+An den gezeigten Beispielen lässt sich sehr gut erkennen, dass Annotation Prozessoren ein sehr mächtiges Werkzeug sind. Annotation Prozessoren können, wie auf magische Weise, Quellcode und Konfigurationsdateien erzeugen. 
 
 Aber mit großer Macht kommt auch große Verantwortung einher. Wenn man nur den Quellcode eines Projektes betrachtet, fehlen die generierten Dateien. Diese tauchen erst nach dem Kompilieren auf und auch dann kann man auf den ersten Blick nicht erkennen, woher die generierten Dateien kommen und wie sie erzeugt wurden.
 

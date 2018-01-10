@@ -149,9 +149,9 @@ Dieser `Writer` schreibt dann eine Java-Datei in den Ordner des Packages in den 
 
 Wir könnten nun den Source Code direkt mit dem `Writer` schreiben, aber man verliert schnell den Überblick durch das Escaping der Hochkommas. 
 
-Eine andere Möglichkeit den Quellcode aus dem `Scope`-Objekt zu erzeugen, ist [JavaPoet](https://github.com/square/javapoet). [JavaPoet](https://github.com/square/javapoet) bietet eine Java Builder-API um Java-Dateien zu erzeugen. Die Verwendung von [JavaPoet](https://github.com/square/javapoet), würde aber den Rahmen des Artikels sprengen, deshalb begnügen wir uns mit einer einfachen Template-Engine für unser Beispeil.
+Eine andere Möglichkeit den Quellcode aus dem `Scope`-Objekt zu erzeugen, ist [JavaPoet](https://github.com/square/javapoet). JavaPoet bietet eine Java Builder-API um Java-Dateien zu erzeugen. Die Verwendung von JavaPoet, würde aber den Rahmen des Artikels sprengen, deshalb begnügen wir uns mit einer einfachen Template-Engine für unser Beispiel.
 
-Wir werden die [Java Implementation](https://github.com/spullara/mustache.java) der Template-Engine [Mustache](https://mustache.github.io/) verwenden. [Mustache](https://mustache.github.io/) Templates sind sehr einfach aufgebaut und die Syntax ist schnell erlernt. 
+Wir werden die [Java Implementation](https://github.com/spullara/mustache.java) der Template-Engine [Mustache](https://mustache.github.io/) verwenden. Mustache Templates sind sehr einfach aufgebaut und die Syntax ist schnell erlernt. 
 
 Um unser Beispiel zu verstehen, reicht es zu wissen, dass
 * mit dem Ausdruck `{{sourceClassName}}` auf die Getter-Methode `getSourceClassName` des `Scope`-Objektes zugegriffen wird
