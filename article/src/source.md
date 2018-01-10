@@ -108,7 +108,7 @@ Jetzt brauchen wir nur noch die Namen aller Getter-Methoden für unser `Scope`-O
 processingEnv.getElementUtils().getAllMembers(typeElement)
 ```
 
-Die `getAllMembers`-Methode gibt uns eine Liste aller Member Elemente unserer Klasse zurück. Aus dieser Liste müssen wir nur noch alle Elemente vom Typ `METHOD`, deren Name mit einem “get” anfängt, herausfiltern. Dafür lässt sich sehr gut die Stream API der Java Collections verwenden, die mit Java 8 eingeführt wurden:
+Die `getAllMembers`-Methode gibt uns eine Liste aller Member Elemente unserer Klasse zurück. Aus dieser Liste müssen wir nur noch alle Elemente vom Typ `METHOD`, deren Name mit einem "get" anfängt, herausfiltern. Dafür lässt sich sehr gut die Stream API der Java Collections verwenden, die mit Java 8 eingeführt wurden:
 
 ```java
 processingEnv.getElementUtils().getAllMembers(typeElement)
@@ -145,13 +145,13 @@ Der `createSourceFile` Methode muss man den gewünschten Klassennamen und das an
 Writer writer = fileObject.openWriter();
 ```
 
-Dieser `Writer` schreibt dann eine Java-Datei in den Ordner des Packages in den Klassenpfad (mit [Maven](https://maven.apache.org) werden von Annotation Prozessoren erstellte Klassen unter `target/generated-sources/annotations` abgelegt).
+Dieser `Writer` schreibt dann eine Java-Datei in den Ordner des Packages in den Klassenpfad (mit Maven werden von Annotation Prozessoren erstellte Klassen unter `target/generated-sources/annotations` abgelegt).
 
 Wir könnten nun den Source Code direkt mit dem `Writer` schreiben, aber man verliert schnell den Überblick durch das Escaping der Hochkommas. 
 
 Eine andere Möglichkeit den Quellcode aus dem `Scope`-Objekt zu erzeugen, ist [JavaPoet](https://github.com/square/javapoet). JavaPoet bietet eine Java Builder-API um Java-Dateien zu erzeugen. Die Verwendung von JavaPoet, würde aber den Rahmen des Artikels sprengen, deshalb begnügen wir uns mit einer einfachen Template-Engine für unser Beispiel.
 
-Wir werden die [Java Implementation](https://github.com/spullara/mustache.java) der Template-Engine [Mustache](https://mustache.github.io/) verwenden. Mustache Templates sind sehr einfach aufgebaut und die Syntax ist schnell erlernt. 
+Wir werden wir die [Java Implementation](https://github.com/spullara/mustache.java) der Template-Engine [Mustache](https://mustache.github.io/) verwenden. Mustache Templates sind sehr einfach aufgebaut und die Syntax ist schnell erlernt. 
 
 Um unser Beispiel zu verstehen, reicht es zu wissen, dass
 * mit dem Ausdruck `{{sourceClassName}}` auf die Getter-Methode `getSourceClassName` des `Scope`-Objektes zugegriffen wird

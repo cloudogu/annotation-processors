@@ -71,7 +71,7 @@ Mit dem `ExtensionProcessor` haben wir jetzt alles um während des Kompilierens 
 </spl-extensions>
 ```
 
-Diese Datei sollte sich im selben Verzeichnis wie die kompilierten Klassen befinden (bei [Maven](https://maven.apache.org/) `target/classes`).
+Diese Datei sollte sich im selben Verzeichnis wie die kompilierten Klassen befinden (bei Maven `target/classes`).
 
 ### Extensions Util
 
@@ -104,6 +104,6 @@ Das gesamte Beispiel kann unter [part-2](https://github.com/cloudogu/annotation-
 
 ### Beispiele aus der Open Source Welt
 
-Ein prominentes Beispiel für einen Annotation Prozessor der Konfigurationsdateien generiert, ist der `"META-INF/services generator"` von Kohsuke Kawaguchi der aus einer `MetaInfServices` Annotation die Konfiguration für den `Java 6 ServiceLoader` erzeugen kann.
+Ein prominentes Beispiel für einen Annotation Prozessor der Konfigurationsdateien generiert, ist der [META-INF/services generator](http://metainf-services.kohsuke.org/) von Kohsuke Kawaguchi der aus einer `MetaInfServices` Annotation die Konfiguration für den `Java 6 ServiceLoader` erzeugen kann.
 
 Ein weiteres Beispiel ist das Plugin Framework von [SCM-Manager 2.0.0](https://www.scm-manager.org/release/scm-manager-2-milestone-1/). SCM-Manager hat in Version 1 noch Classpath Scanning verwendet um die Erweiterungen zu finden, durch den Umstieg auf Annotation Prozessoren konnte die Startzeit von SCM-Manager 2 drastisch verkürzt werden.
