@@ -4,6 +4,7 @@
     "sources": [
         "introduction.md",
         "configuration.md",
-        "source.md"
+        "source.md",
+        "conclusion.md"
     ]
 }
