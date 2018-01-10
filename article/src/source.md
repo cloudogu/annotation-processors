@@ -1,6 +1,6 @@
 ## Source Code generieren
 
-Im dritten und letzten Abschnitt des Artikels wird demonstriert wie man Source Code mit Hilfe eines Annotation Prozessors generieren kann. In unserem Beispiel wollen für jede mit einer `@JsonObject` Annotation versehenen Klasse eine zusätzliche `JsonWriter` Klasse generieren. Die generierten `JsonWriter` Klassen, sollen Json für alle `Getter`-Methoden der Annotierten Klasse erzeugen. Damit ist es möglich annotierte Klassen, in das Json Format zu serialisieren. Konkret soll zu der Klasse `Person`:
+Im dritten und letzten Abschnitt des Artikels wird demonstriert wie man Source Code mit Hilfe eines Annotation Prozessors generieren kann. In unserem Beispiel wollen wir für jede mit einer `@JsonObject` Annotation versehenen Klasse eine zusätzliche `JsonWriter` Klasse generieren. Die generierten `JsonWriter` Klassen, sollen Json für alle `Getter`-Methoden der Annotierten Klasse erzeugen. Damit ist es möglich annotierte Klassen in das Json Format zu serialisieren. Konkret soll zu der Klasse `Person`:
 
 ```java
 @JsonObject
@@ -178,7 +178,7 @@ public final class {{targetClassName}} {
 }
 ```
 
-Mit folgendem Code wird das Mustache Template aus dem Classpath gelesen, mit dem Scope-Objekt ausgeführt und in den Writer des JavaFileObjectes geschrieben:
+Mit folgendem Code wird das Mustache Template aus dem Classpath gelesen, mit dem `Scope`-Objekt ausgeführt und in den Writer des JavaFileObjectes geschrieben:
 
 ```java
 MustacheFactory factory = new DefaultMustacheFactory();

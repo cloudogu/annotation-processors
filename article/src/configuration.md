@@ -1,8 +1,8 @@
 ## Konfigurationsdateien generieren
 
-Im zweiten Abschnitt wollen wir uns dem Erzeugen von Konfigurationsdateien für eine einfache Plugin Bibliothek widmen. Dafür werden wir einen Annotation Prozessor schreiben, der alle Klassen, die mit einer `@Extension` Annotation versehen wurden, mitsamt ihres Javadoc, in eine XML-Datei schreibt. Zusätzlich werden wir eine Klasse schreiben die es uns erlaubt diese Dateien aus dem Classpath auszulesen. 
+Im zweiten Abschnitt wollen wir uns dem Erzeugen von Konfigurationsdateien für eine einfache Plugin Bibliothek widmen. Dafür werden wir einen Annotation Prozessor schreiben, der alle Klassen, die mit einer `@Extension` Annotation versehen wurden, in eine XML-Datei schreibt. Zudem vollständigen Namen der Klasse soll außerdem noch das Javadoc der Klasse mit in die XML-Datei geschriben werden. Zusätzlich werden wir eine Klasse schreiben die es uns erlaubt diese Dateien aus dem Classpath auszulesen. 
 
-Es ist auch möglich alle Klassen mit einer `@Extension` Annotation zu finden, ohne einen Annotation Prozessor zu verwenden. Dafür müsste man aber alle Element des Classpath (Ordner und Jar-Dateien) öffnen, jede Klasse laden und mit Reflection überprüfen, ob die Klasse die gesuchte Annotation hat. Dieses Vorgehen ist sehr viel aufwändiger, anfälliger für Fehler und deutlich langsamer.
+Es ist auch möglich alle Klassen mit einer `@Extension` Annotation zu finden, ohne einen Annotation Prozessor zu verwenden. Dafür müsste man aber alle Element des Classpath (Ordner und Jar-Dateien) öffnen, jede Klasse laden und mit `Reflection` überprüfen, ob die Klasse die gesuchte Annotation hat. Dieses Vorgehen ist sehr viel aufwändiger, anfälliger für Fehler und deutlich langsamer.
 
 ### Die Extension Annotation
 
@@ -13,7 +13,7 @@ public @interface Extension {
 }
 ```
 
-Die Extension Annotation ähnelt sehr der Log-Annotation aus dem ersten Abschnitt, mit Ausnahme der Documented Annotation. `@Documented` sorgt dafür das unsere Annotation im Javadoc der annotierten Klasse auftaucht.
+Die Extension Annotation ähnelt sehr der Log-Annotation aus dem ersten Abschnitt, mit Ausnahme der `Documented` Annotation. `@Documented` sorgt dafür, dass unsere Annotation im Javadoc der annotierten Klasse auftaucht.
 
 ### Der Extension Annotation Prozessor
 
@@ -49,13 +49,13 @@ FileObject fileObject = filer.getResource(StandardLocation.CLASS_OUTPUT, "", "ex
 File extensionsFile = new File(fileObject.toUri());
 ```
 
-Jetzt müssen wir die Extensions Datei nur noch mit Inhalt füllen. Dafür erstellen wir eine Wrapper Klasse für unsere `ExtensionDescriptor` Klasse und annotieren beide mit [JAXB](https://docs.oracle.com/javase/tutorial/jaxb/intro/index.html) Annotationen. Anschließend können wir die Extensions-Datei schreiben mit Hilfe von JAXB schreiben:
+Jetzt müssen wir die Extensions Datei nur noch mit Inhalt füllen. Dafür erstellen wir eine `Wrapper` Klasse für unsere `ExtensionDescriptor` Klasse und annotieren beide mit [JAXB](https://docs.oracle.com/javase/tutorial/jaxb/intro/index.html) Annotationen. Anschließend können wir die Extensions-Datei schreiben mit Hilfe von JAXB schreiben:
 
 ```java
 JAXB.marshal(new ExtensionDescriptorWrapper(descriptors), file);
 ```
 
-Mit dem `ExtensionProcessor` haben wir jetzt alles um während des Kompilierens alle Klassen die mit einer `Extension` Annotation versehen wurden in einer Datei zu speichern. Das Ergebnis sollte ungefähr so aussehen:
+Mit dem `ExtensionProcessor` haben wir jetzt alles um während des Kompilierens alle Klassen, die mit einer `Extension` Annotation versehen wurden, in einer Datei zu speichern. Das Ergebnis sollte ungefähr so aussehen:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -106,4 +106,4 @@ Das gesamte Beispiel kann unter [part-2](https://github.com/cloudogu/annotation-
 
 Ein prominentes Beispiel für einen Annotation Prozessor der Konfigurationsdateien generiert, ist der [META-INF/services generator](http://metainf-services.kohsuke.org/) von Kohsuke Kawaguchi der aus einer `MetaInfServices` Annotation die Konfiguration für den `Java 6 ServiceLoader` erzeugen kann.
 
-Ein weiteres Beispiel ist das Plugin Framework von [SCM-Manager 2.0.0](https://www.scm-manager.org/release/scm-manager-2-milestone-1/). SCM-Manager hat in Version 1 noch Classpath Scanning verwendet um die Erweiterungen zu finden, durch den Umstieg auf Annotation Prozessoren konnte die Startzeit von SCM-Manager 2 drastisch verkürzt werden.
+Ein weiteres Beispiel ist das Plugin Framework von [SCM-Manager 2.0.0](https://www.scm-manager.org/release/scm-manager-2-milestone-1/). SCM-Manager hat in Version 1 noch Classpath Scanning verwendet um die Erweiterungen zu finden. Durch den Umstieg auf Annotation Prozessoren konnte die Startzeit von SCM-Manager 2 drastisch verkürzt werden.
