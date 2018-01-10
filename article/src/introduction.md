@@ -6,11 +6,7 @@ In dem ersten Abschnitt des Artikels betrachten wir die grundsätzliche Funktion
 
 Annotation Prozessoren werden während des Builds vom Compiler (javac) aufgerufen, wenn eine der konfigurierten Annotationen gefunden wurde. Dabei kann ein Annotation Prozessor bestimmen, über welche Annotationen er benachrichtigt werden will. Das können eine einzelne, mehrere oder alle Annotationen sein. Wenn der Compiler eine Annotation findet, wird überprüft, ob für diese ein Prozessor registriert wurde. Ist dies der Fall, wird er ausgeführt. An diesem Punkt kann der Annotation Prozessor seine Arbeit verrichten und entscheiden, ob für die gefundene Annotation noch weitere Prozessoren aufgerufen werden dürfen.
 
-## OpenSource Beispiele
-
-Ein prominentes Beispiel für einen Annotation Prozessor ist der `"META-INF/services generator"` von Kohsuke Kawaguchi der aus einer `MetaInfServices` Annotation die Konfiguration für den `Java 6 ServiceLoader` erzeugen kann.
-
-Ein weiteres Beispiel ist das `"Project Lombok"`. Es verspricht, mit einer Reihe von Annotationen, den Boilerplate Code von Java Klassen automatisch zu generieren, z.B. Getter, Setter, hashCode- oder equals-Methoden.
+In ersten Abschnitt des Artikels werden wir einen einfachen Annotation Prozessor erstellen der eine Log-Meldung während des Kompilierens ausgibt. Diesen werden wir zunächst nur mit Hilfe des Java-Compilers verwenden. Anschließend werden wir uns anschauen wie wir unseren einfachen Annotation Prozessor mit einem Build-Tool wie [Maven](https://maven.apache.org/) verwenden können.
 
 ## Ein einfacher Annotation Prozessor
 
@@ -114,7 +110,7 @@ Jetzt sollte der Compiler den Annotation Prozessor aufrufen und wir sollten folg
 Note: found @Log at com.cloudogu.blog.annotationprocessor.sample.Hello
 ```
 
-Annotation Prozessoren können auch mit den gängigen Buildtools und IDEs verwendet werden. Um Annotation Prozessoren zum Beispiel mit Maven zu verwenden, muss der Build in separate Module aufgeteilt werden. Die Separierung muss erfolgen, damit Maven den Annotation Prozessor unabhängig und vor Verwendung kompilieren kann. Unser Beispiel mit Maven kann man unter der URL [https://github.com/cloudogu/annotation-processors/tree/master/part-1-maven](https://github.com/cloudogu/annotation-processors/tree/master/part-1-maven) einsehen. Hierbei ist zu beachten, dass das `maven-compiler-plugin` im Modul `sample` so konfiguriert ist, dass Compiler-Warnings ausgegeben werden (`showWarnings` auf `true`). Führt man nun `mvn clean install` im `parent`-Modul aus, erscheint die erwartete Meldung im Output:
+Annotation Prozessoren können auch mit den gängigen Buildtools und IDEs verwendet werden. Um Annotation Prozessoren zum Beispiel mit [Maven](https://maven.apache.org) zu verwenden, muss der Build in separate Module aufgeteilt werden. Die Separierung muss erfolgen, damit [Maven](https://maven.apache.org) den Annotation Prozessor unabhängig und vor Verwendung kompilieren kann. Unser Beispiel mit [Maven](https://maven.apache.org) kann man unter der URL [https://github.com/cloudogu/annotation-processors/tree/master/part-1-maven](https://github.com/cloudogu/annotation-processors/tree/master/part-1-maven) einsehen. Hierbei ist zu beachten, dass das `maven-compiler-plugin` in beiden Modulen konfiguriert werden muss. Im `sample`-Modul sollen die Compiler-Warnings ausgegeben werden, deshalb muss`showWarnings` auf `true` gesetzt werden und im `log`-Modul muss der `compiler` wie oben erwähnt mit `-proc:none` ausgeführt werden (`compilerArgs`). Führt man nun `mvn clean install` im `parent`-Modul aus, erscheint die erwartete Meldung im Output:
 
 ```text
 [INFO] found @Log at com.cloudogu.blog.annotationprocessor.sample.Hello
