@@ -22,41 +22,27 @@
  * SOFTWARE.
  */
 
+package com.cloudogu.blog;
 
-package com.cloudogu.blog.spl;
+import com.cloudogu.blog.spl.ExtensionDescriptor;
+import com.cloudogu.blog.spl.Extensions;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
-import javax.xml.bind.JAXB;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
-/**
- * Read extensions from classpath.
- */
-public final class Extensions {
+public class AppTest {
 
-    static final String LOCATION = "extensions.xml";
+    @Test
+    public void testExtensions() throws IOException {
+        List<ExtensionDescriptor> descriptors = Extensions.getExtensions();
+        assertEquals(2, descriptors.size());
 
-    private Extensions() {
-    }
-
-    /**
-     * Reads extensions from classpath and combines them.
-     *
-     * @return combined list of extensions.
-     *
-     * @throws IOException
-     */
-    public static List<ExtensionDescriptor> getExtensions() throws IOException {
-        List<ExtensionDescriptor> descriptors = new ArrayList<>();
-        Enumeration<URL> extensionFiles = Thread.currentThread().getContextClassLoader().getResources(LOCATION);
-        while (extensionFiles.hasMoreElements()) {
-            URL extensionFile = extensionFiles.nextElement();
-            ExtensionDescriptorWrapper extensionDescriptorWrapper = JAXB.unmarshal(extensionFile, ExtensionDescriptorWrapper.class);
-            descriptors.addAll(extensionDescriptorWrapper.getExtensions());
+        for ( ExtensionDescriptor descriptor : descriptors ) {
+            String className = descriptor.getClassName();
+            assertTrue( className.equals(AhoiService.class.getName()) || className.equals(HelloService.class.getName()) );
         }
-        return descriptors;
     }
+
 }
