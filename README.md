@@ -5,7 +5,7 @@ Both English translation and German original can be found on the [Cloudogu Blog]
 
 <table  border="0">
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/java_annotation_1-259349d8502dbee3cb9355e812761b41e06668f2841081b18cc8c79f90d0ff4b.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/images/blog/2018/Java_Annotation_1_150x150.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/Java-Annotation-Processors_1-Intro?mtm_campaign=java-annotations&mtm_kwd=blog&mtm_source=github&mtm_medium=link"> 🇬🇧 Java Annotation Processors - An introduction</a></td>
   </tr>
   <tr>
@@ -13,7 +13,7 @@ Both English translation and German original can be found on the [Cloudogu Blog]
   </tr>
  
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/java_annotation_2-cff483e2e452e920909f6713b9e93d3a7f24ac3425ad0b5f881bb14c10a9e4d2.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/images/blog/2018/Java_Annotation_2_150x150.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/Java-Annotation-Processors_2-Creating-Configurations?mtm_campaign=java-annotations&mtm_kwd=blog&mtm_source=github&mtm_medium=link"> 🇬🇧 Java Annotation Processors - Creating Configurations</a></td>
   </tr>
   <tr>
@@ -21,7 +21,7 @@ Both English translation and German original can be found on the [Cloudogu Blog]
   </tr>
   
   <tr>
-    <td rowspan="2"><img src="https://cloudogu.com/assets/blog/2018/java_annotation_3-59b852074370459567e28042a4e8304442811322b04049b7837eeb860dbb7f98.png" width=50% /></td>
+    <td rowspan="2"><img src="https://cloudogu.com/images/blog/2018/Java_Annotation_3_150x150.png" width=50% /></td>
     <td><a href="https://cloudogu.com/en/blog/Java-Annotation-Processors_3-Generating-Code?mtm_campaign=java-annotations&mtm_kwd=blog&mtm_source=github&mtm_medium=link"> 🇬🇧 Java Annotation Processors - Generating Code</a></td>
   </tr>
   <tr>
